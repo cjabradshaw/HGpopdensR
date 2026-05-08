@@ -1,0 +1,50 @@
+Australia-wide 'hunter-gatherer' (non-agropastoralist) population estimate from bundled FORGE outputs
+
+country polygon: /Users/brad0317/Documents/GitHub/HGpopdensR/INPUT/AUS.geojson
+population variable: hum_popu (human population density, ind/m2)
+
+logical steps used for the estimate:
+1. Load Australia country polygon from bundled GeoJSON file
+2. Open each global NetCDF output and read lat, lon, hum_popu
+3. Treat each grid-cell centre as representing a full 2°×2° cell
+4. Intersect each grid cell with the Australia polygon to keep only the in-country area
+5. Compute WGS84 geodetic area of that cell-country overlap
+6. Multiply hum_popu (ind/m2) by overlap area (m2) to convert density to number of people
+7. Sum over all overlapping cells to obtain the Australia-wide population total
+8. Report the requested scenario outputs and treat S2 as the preferred estimate because Zhu et al. (2021)
+   noted that S0 and S1 unrealistically omit many hunter-gatherers from interior Australia.
+9. Assume the standard deviation of density is 70% of mean density, following the
+ assumption based on Bradshaw et al. 2021, doi:10.1038/s41467-021-21551-3 &
+              Lourandos, H. Continent of Hunter-Gatherers: New Perspectives in Australian Prehistory.
+              (Cambridge University Press, 1997).
+10. Assume Australia-wide total inherits same relative uncertainty as density
+11. Convert that coefficient of variation into a log-Normal distribution so interval remains
+    positive, then extract the central 95% interval.
+
+scenario definitions from the paper:
+- S0: FORGE forced directly by ORCHIDEE outputs
+- S1: S0 with daily NPP scaled so annual NPP matches MODIS in each grid cell
+- S2: observation-based daily NPP seasonality and plant decay; Zhu et al. (2021) treat this as the preferred run
+
+Australia totals:
+run  total population     mean density        coverage
+S0          255,369 people      3.32 per 100 km^2  222 intersecting cells
+S1          506,151 people      6.58 per 100 km^2  222 intersecting cells
+S2        1,556,314 people     20.26 per 100 km^2  212 intersecting cells
+
+preferred estimate: S2 = 1,556,314 people (20.26 people per 100 km^2).
+approximate 95% confidence interval for S2: 369,812 to 4,395,690 people.
+confidence interval method: log-Normal interval with density SD = 0.70 × mean density.
+derived log-space SD = 0.631 from coefficient of variation 0.70.
+assumption source: Bradshaw et al. 2021, doi:10.1038/s41467-021-21551-3 &
+              Lourandos, H. Continent of Hunter-Gatherers: New Perspectives in Australian Prehistory.
+              (Cambridge University Press, 1997).
+
+Notes:
+- Bundled outputs contain 1 equilibrated annual time slice per scenario
+- Estimate is area-weighted by true Australia/cell intersection, not by cell centres alone
+- confidence interval based on uncertainty in underlying density estimate, not on
+  differences between S0/S1/S2 scenarios
+- point estimate treated as mean of positive-valued total-population distribution
+- using a log-Normal distribution, interval is asymmetric on original population
+  scale even though it is symmetric in log space
