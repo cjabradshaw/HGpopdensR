@@ -19,5 +19,5 @@ R translation of the Australia-wide 'hunter-gatherer' (non-agropastoralist) popu
 ## Current default assumptions
 - preferred run is `S2`.
 - 95% confidence interval based on assumed **density uncertainty**, not scenario spread
-- default density uncertainty assumption is **SD = 0.7 × mean density**, following **Bradshaw et al. (2021)** (doi:<a href="http://doi.org/10.1038/s41467-021-21551-3">10.1038/s41467-021-21551-3</a>).
+- default density uncertainty assumption is **SD = 0.7 × mean density**, following **Bradshaw et al. (2021)** (doi:<a href="http://doi.org/10.1038/s41467-021-21551-3">10.1038/s41467-021-21551-3</a>)
 - confidence interval computed with **log-Normal** distribution to ensure population total interval remains positive
